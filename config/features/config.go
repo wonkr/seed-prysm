@@ -3,19 +3,19 @@ Package features defines which features are enabled for runtime
 in order to selectively enable certain features to maintain a stable runtime.
 
 The process for implementing new features using this package is as follows:
-	1. Add a new CMD flag in flags.go, and place it in the proper list(s) var for its client.
-	2. Add a condition for the flag in the proper Configure function(s) below.
-	3. Place any "new" behavior in the `if flagEnabled` statement.
-	4. Place any "previous" behavior in the `else` statement.
-	5. Ensure any tests using the new feature fail if the flag isn't enabled.
-	5a. Use the following to enable your flag for tests:
-	cfg := &featureconfig.Flags{
-		VerifyAttestationSigs: true,
-	}
-	resetCfg := featureconfig.InitWithReset(cfg)
-	defer resetCfg()
-	6. Add the string for the flags that should be running within E2E to E2EValidatorFlags
-	and E2EBeaconChainFlags.
+ 1. Add a new CMD flag in flags.go, and place it in the proper list(s) var for its client.
+ 2. Add a condition for the flag in the proper Configure function(s) below.
+ 3. Place any "new" behavior in the `if flagEnabled` statement.
+ 4. Place any "previous" behavior in the `else` statement.
+ 5. Ensure any tests using the new feature fail if the flag isn't enabled.
+    5a. Use the following to enable your flag for tests:
+    cfg := &featureconfig.Flags{
+    VerifyAttestationSigs: true,
+    }
+    resetCfg := featureconfig.InitWithReset(cfg)
+    defer resetCfg()
+ 6. Add the string for the flags that should be running within E2E to E2EValidatorFlags
+    and E2EBeaconChainFlags.
 */
 package features
 
@@ -133,6 +133,13 @@ func configureTestnet(ctx *cli.Context) error {
 		}
 		applySepoliaFeatureFlags(ctx)
 		params.UseSepoliaNetworkConfig()
+	} else if ctx.Bool(SeedTestnet.Name) {
+		log.Warn("Running on the Seed Beacon Chain Testnet")
+		if err := params.SetActive(params.SeedConfig().Copy()); err != nil {
+			return err
+		}
+		applySeedFeatureFlags(ctx)
+		params.UseSeedNetworkConfig()
 	} else {
 		if ctx.IsSet(cmd.ChainConfigFileFlag.Name) {
 			log.Warn("Running on custom Ethereum network specified in a chain configuration yaml file")
@@ -159,6 +166,10 @@ func applyRopstenFeatureFlags(ctx *cli.Context) {
 
 // Insert feature flags within the function to be enabled for Sepolia testnet.
 func applySepoliaFeatureFlags(ctx *cli.Context) {
+}
+
+// Insert feature flags within the function to be enabled for Sepolia testnet.
+func applySeedFeatureFlags(ctx *cli.Context) {
 }
 
 // ConfigureBeaconChain sets the global config based

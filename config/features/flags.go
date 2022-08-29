@@ -7,6 +7,11 @@ import (
 )
 
 var (
+	// SeedTestnet flag for the multiclient Ethereum consensus testnet.
+	SeedTestnet = &cli.BoolFlag{
+		Name:  "seed",
+		Usage: "Run Prysm configured for the Seed beacon chain test network",
+	}
 	// PraterTestnet flag for the multiclient Ethereum consensus testnet.
 	PraterTestnet = &cli.BoolFlag{
 		Name:    "prater",
@@ -131,6 +136,7 @@ var ValidatorFlags = append(deprecatedFlags, []cli.Flag{
 	PraterTestnet,
 	RopstenTestnet,
 	SepoliaTestnet,
+	SeedTestnet,
 	Mainnet,
 	dynamicKeyReloadDebounceInterval,
 	attestTimely,
@@ -151,6 +157,7 @@ var BeaconChainFlags = append(deprecatedBeaconFlags, append(deprecatedFlags, []c
 	PraterTestnet,
 	RopstenTestnet,
 	SepoliaTestnet,
+	SeedTestnet,
 	Mainnet,
 	disablePeerScorer,
 	disableBroadcastSlashingFlag,

@@ -11,4 +11,5 @@ const (
 	PraterName          = "prater"
 	RopstenName         = "ropsten"
 	SepoliaName         = "sepolia"
+	SeedName            = "seed"
 )
